@@ -1,219 +1,227 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>水面垃圾 AI 智能检测系统</title>
     <style>
-        :root {
-            --primary: #4CAF50;
-            --bg-color: #1e1e2f;
-            --card-bg: #2a2a3f;
-            --text-color: #ffffff;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 { color: var(--primary); margin-bottom: 5px; }
-        
-        /* 模式切换按钮 */
-        .tab-container {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .tab-btn {
-            background-color: #33334d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            font-weight: bold;
-        }
+      :root {
+        --primary: #4caf50;
+        --bg-color: #1e1e2f;
+        --card-bg: #2a2a3f;
+        --text-color: #ffffff;
+      }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
 
-        /* 画面显示区 */
-        .display-area {
-            background-color: var(--card-bg);
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            width: 800px;
-            height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-        }
-        .display-area img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .placeholder {
-            color: #888;
-            font-size: 20px;
-        }
+      /* 模式切换按钮 */
+      .tab-container {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+      }
+      .tab-btn {
+        background-color: #33334d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+      }
+      .tab-btn.active {
+        background-color: var(--primary);
+        font-weight: bold;
+      }
 
-        /* 控制面板 */
-        .control-panel {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            width: 760px;
-            text-align: center;
-            display: none; /* 默认隐藏，通过JS切换 */
-        }
-        .control-panel.active {
-            display: block;
-        }
+      /* 画面显示区 */
+      .display-area {
+        background-color: var(--card-bg);
+        border: 2px solid var(--primary);
+        border-radius: 10px;
+        width: 800px;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        margin-bottom: 20px;
+      }
+      .display-area img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      .placeholder {
+        color: #888;
+        font-size: 20px;
+      }
 
-        /* 按钮通用样式 */
-        .action-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 0 10px;
-        }
-        .action-btn.stop { background-color: #f44336; }
-        .action-btn:hover { opacity: 0.9; }
-        
-        input[type="file"] { margin-right: 10px; }
+      /* 控制面板 */
+      .control-panel {
+        background-color: var(--card-bg);
+        padding: 20px;
+        border-radius: 8px;
+        width: 760px;
+        text-align: center;
+        display: none; /* 默认隐藏，通过JS切换 */
+      }
+      .control-panel.active {
+        display: block;
+      }
+
+      /* 按钮通用样式 */
+      .action-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 0 10px;
+      }
+      .action-btn.stop {
+        background-color: #f44336;
+      }
+      .action-btn:hover {
+        opacity: 0.9;
+      }
+
+      input[type="file"] {
+        margin-right: 10px;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <h1>水面垃圾智能检测系统</h1>
     <p>实时摄像头 / 静态图片分析</p>
 
     <div class="tab-container">
-        <button class="tab-btn active" onclick="switchMode('camera')">实时摄像头</button>
-        <button class="tab-btn" onclick="switchMode('image')">图片检测</button>
+      <button class="tab-btn active" onclick="switchMode('camera')">实时摄像头</button>
+      <button class="tab-btn" onclick="switchMode('image')">图片检测</button>
     </div>
 
     <div class="display-area" id="display-area">
-        <div id="placeholder" class="placeholder">请选择操作</div>
-        <img id="main-image" src="" style="display: none;">
+      <div id="placeholder" class="placeholder">请选择操作</div>
+      <img id="main-image" src="" style="display: none" />
     </div>
 
     <div id="panel-camera" class="control-panel active">
-        <button class="action-btn" onclick="startCamera()">开启摄像头</button>
-        <button class="action-btn stop" onclick="stopCamera()">关闭摄像头</button>
-        <p id="cam-status" style="margin-top:15px; color:#aaa;">当前状态：已关闭</p>
+      <button class="action-btn" onclick="startCamera()">开启摄像头</button>
+      <button class="action-btn stop" onclick="stopCamera()">关闭摄像头</button>
+      <p id="cam-status" style="margin-top: 15px; color: #aaa">当前状态：已关闭</p>
     </div>
 
     <div id="panel-image" class="control-panel">
-        <input type="file" id="image-upload" accept="image/*">
-        <button class="action-btn" onclick="uploadAndDetect()">上传并检测</button>
-        <p id="upload-status" style="margin-top:15px; color:#aaa;">支持 .jpg, .png 等格式</p>
+      <input type="file" id="image-upload" accept="image/*" />
+      <button class="action-btn" onclick="uploadAndDetect()">上传并检测</button>
+      <p id="upload-status" style="margin-top: 15px; color: #aaa">支持 .jpg, .png 等格式</p>
     </div>
 
     <script>
-        const mainImage = document.getElementById('main-image');
-        const placeholder = document.getElementById('placeholder');
-        let currentMode = 'camera';
+      const mainImage = document.getElementById("main-image");
+      const placeholder = document.getElementById("placeholder");
+      let currentMode = "camera";
 
-        // 切换模式逻辑
-        function switchMode(mode) {
-            currentMode = mode;
-            stopCamera(); // 切换模式时自动关闭摄像头
-            
-            // 更新按钮高亮
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+      // 切换模式逻辑
+      function switchMode(mode) {
+        currentMode = mode;
+        stopCamera(); // 切换模式时自动关闭摄像头
 
-            // 切换控制面板显示
-            document.getElementById('panel-camera').classList.remove('active');
-            document.getElementById('panel-image').classList.remove('active');
-            document.getElementById(`panel-${mode}`).classList.add('active');
+        // 更新按钮高亮
+        document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
 
-            // 重置画面
-            mainImage.style.display = 'none';
-            placeholder.style.display = 'block';
-            placeholder.innerText = mode === 'camera' ? "点击下方按钮开启摄像头" : "请选择图片并上传";
+        // 切换控制面板显示
+        document.getElementById("panel-camera").classList.remove("active");
+        document.getElementById("panel-image").classList.remove("active");
+        document.getElementById(`panel-${mode}`).classList.add("active");
+
+        // 重置画面
+        mainImage.style.display = "none";
+        placeholder.style.display = "block";
+        placeholder.innerText = mode === "camera" ? "点击下方按钮开启摄像头" : "请选择图片并上传";
+      }
+
+      // ================= 摄像头逻辑 =================
+      function startCamera() {
+        placeholder.style.display = "none";
+        mainImage.style.display = "block";
+        // 设置 src 触发 Flask 的视频流
+        mainImage.src = "/video_feed?" + new Date().getTime(); // 加时间戳防缓存
+        document.getElementById("cam-status").innerText = "当前状态：正在运行";
+        document.getElementById("cam-status").style.color = "#4CAF50";
+      }
+
+      function stopCamera() {
+        // 清空 src 即可停止请求视频流，Flask 端会捕捉到断开并释放摄像头
+        mainImage.src = "";
+        mainImage.style.display = "none";
+        placeholder.style.display = "block";
+        placeholder.innerText = "摄像头已关闭";
+        document.getElementById("cam-status").innerText = "当前状态：已关闭 🔴";
+        document.getElementById("cam-status").style.color = "#aaa";
+      }
+
+      // ================= 图片上传逻辑 =================
+      function uploadAndDetect() {
+        const fileInput = document.getElementById("image-upload");
+        const file = fileInput.files[0];
+        const statusText = document.getElementById("upload-status");
+
+        if (!file) {
+          statusText.innerText = "请先选择一张图片！";
+          statusText.style.color = "#f44336";
+          return;
         }
 
-        // ================= 摄像头逻辑 =================
-        function startCamera() {
-            placeholder.style.display = 'none';
-            mainImage.style.display = 'block';
-            // 设置 src 触发 Flask 的视频流
-            mainImage.src = "/video_feed?" + new Date().getTime(); // 加时间戳防缓存
-            document.getElementById('cam-status').innerText = "当前状态：正在运行";
-            document.getElementById('cam-status').style.color = "#4CAF50";
-        }
+        statusText.innerText = "正在上传并检测，请稍候...";
+        statusText.style.color = "#aaa";
 
-        function stopCamera() {
-            // 清空 src 即可停止请求视频流，Flask 端会捕捉到断开并释放摄像头
-            mainImage.src = "";
-            mainImage.style.display = 'none';
-            placeholder.style.display = 'block';
-            placeholder.innerText = "摄像头已关闭";
-            document.getElementById('cam-status').innerText = "当前状态：已关闭 🔴";
-            document.getElementById('cam-status').style.color = "#aaa";
-        }
+        const formData = new FormData();
+        formData.append("file", file);
 
-        // ================= 图片上传逻辑 =================
-        function uploadAndDetect() {
-            const fileInput = document.getElementById('image-upload');
-            const file = fileInput.files[0];
-            const statusText = document.getElementById('upload-status');
+        // 使用 fetch API 发送图片到后端
+        fetch("/upload_image", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // 显示后端返回的 Base64 图片
+              placeholder.style.display = "none";
+              mainImage.style.display = "block";
+              mainImage.src = "data:image/jpeg;base64," + data.image_data;
 
-            if (!file) {
-                statusText.innerText = "请先选择一张图片！";
-                statusText.style.color = "#f44336";
-                return;
+              statusText.innerText = "检测完成！";
+              statusText.style.color = "#4CAF50";
+            } else {
+              statusText.innerText = "发生错误: " + data.error;
+              statusText.style.color = "#f44336";
             }
-
-            statusText.innerText = "正在上传并检测，请稍候...";
-            statusText.style.color = "#aaa";
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // 使用 fetch API 发送图片到后端
-            fetch('/upload_image', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // 显示后端返回的 Base64 图片
-                    placeholder.style.display = 'none';
-                    mainImage.style.display = 'block';
-                    mainImage.src = "data:image/jpeg;base64," + data.image_data;
-                    
-                    statusText.innerText = "检测完成！";
-                    statusText.style.color = "#4CAF50";
-                } else {
-                    statusText.innerText = "发生错误: " + data.error;
-                    statusText.style.color = "#f44336";
-                }
-            })
-            .catch(error => {
-                statusText.innerText = "网络请求失败";
-                statusText.style.color = "#f44336";
-                console.error('Error:', error);
-            });
-        }
+          })
+          .catch((error) => {
+            statusText.innerText = "网络请求失败";
+            statusText.style.color = "#f44336";
+            console.error("Error:", error);
+          });
+      }
     </script>
-</body>
+  </body>
 </html>
