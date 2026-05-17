@@ -1,0 +1,31 @@
+# ==========================================
+# YOLO 数据集配置文件 (Dataset Configuration)
+# ==========================================
+
+# 1. 路径设置 (Paths)
+# 请务必将这里替换为你 dataset 文件夹的绝对路径
+path: C:\Users\Lenovo\Downloads\ultralytics-main\ultralytics-main\dataset # <--- 修改这里！例如: D:/my_projects/garbage_dataset
+
+# 训练集和验证集图片的路径 (相对于上面的 path 目录)
+train: train/images  
+val: val/images      
+
+# 如果你有划分测试集，就把下面这行的注释取消掉
+# test: test/images    
+
+# ------------------------------------------
+
+# 2. 类别设置 (Classes)
+nc: 11  # 已经为你修改为 11 类
+names:
+  0: leaves   # <--- 替换为 0 对应的真实类别名 (例如: bottle)
+  1: branch   # <--- 替换为 1 对应的真实类别名 (例如: plastic_bag)
+  2: plastic_bottle   # 以此类推...
+  3: grass
+  4: plastic_box
+  5: plastic_bag
+  6: cans
+  7: plastic_object
+  8: plastic_cap
+  9: fruit
+  10: other
