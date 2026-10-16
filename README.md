@@ -1,4 +1,5 @@
 # 🚤 WTR-System (Water Trash Recovery)
+
 > 基于 YOLOv11 与边缘计算的水面智能清污无人船视觉感知系统
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
@@ -22,20 +23,22 @@ WTR-System 是一个面向复杂水域环境的“眼-手-船”协同智能垃�
 
 ## 🛠️ 技术栈
 
-* **深度学习框架**: PyTorch, Ultralytics YOLOv11
-* **计算机视觉**: OpenCV
-* **Web 后端**: Flask
-* **前端交互**: HTML5, Vanilla JavaScript, CSS3
-* **硬件预留**: STM32F1 / RDK X3 / 串口通信 (PySerial)
+- **深度学习框架**: PyTorch, Ultralytics YOLOv11
+- **计算机视觉**: OpenCV
+- **Web 后端**: Flask
+- **前端交互**: HTML5, Vanilla JavaScript, CSS3
+- **硬件预留**: STM32F1 / RDK X3 / 串口通信 (PySerial)
 
 ---
 
 ## 🚀 快速开始
 
 ### 1. 环境准备
+
 确保你的计算机或边缘开发板已安装 Python 3.9+，然后克隆本项目并安装依赖：
 
 ```bash
 git clone [https://github.com/yourusername/WTR-System.git](https://github.com/yourusername/WTR-System.git)
 cd WTR-System
 pip install -r requirements.txt
+```
